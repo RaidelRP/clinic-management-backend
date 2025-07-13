@@ -8,6 +8,7 @@ import com.management.clinic.backend.repository.DoctorRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,14 @@ public class DoctorController {
     private DoctorRepository repository;
 
     @GetMapping("/{id}")
-    public ResponseEntity getDoctor(@PathVariable Long id){
+    public ResponseEntity getDoctor(@PathVariable Long id) {
         var doctor = repository.getReferenceById(id);
         return ResponseEntity.ok(new DoctorInfo(doctor));
     }
+
     @GetMapping
-    public ResponseEntity listdDoctors(@PageableDefault(sort = {"name"}) Pageable pagination){
-        var page = repository.findAll().stream().map(DoctorInfo::new);
+    public ResponseEntity<Page<DoctorInfo>> listDoctors(@PageableDefault(sort = {"name"}) Pageable pagination) {
+        var page = repository.findAll(pagination).map(DoctorInfo::new);
         return ResponseEntity.ok(page);
     }
 
@@ -44,15 +46,15 @@ public class DoctorController {
 
     @Transactional
     @PutMapping
-    public ResponseEntity editDoctor(@RequestBody @Valid DoctorInfo info){
+    public ResponseEntity editDoctor(@RequestBody @Valid DoctorInfo info) {
         var doctor = repository.getReferenceById(info.id());
         doctor.update(info);
-        return  ResponseEntity.ok(new DoctorInfo(doctor));
+        return ResponseEntity.ok(new DoctorInfo(doctor));
     }
 
     @Transactional
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteDoctor(@PathVariable Long id){
+    public ResponseEntity deleteDoctor(@PathVariable Long id) {
         var doctor = repository.getReferenceById(id);
         repository.delete(doctor);
 

@@ -1,14 +1,16 @@
 package com.management.clinic.backend.model.patient;
 
 import com.management.clinic.backend.model.Gender;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 public record PatientInfo(
-        Long id,
+        @NotNull Long id,
         String name,
         Gender gender,
-        String email,
+        @Email String email,
         LocalDate birthDate,
         String address
 ) {

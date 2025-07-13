@@ -2,13 +2,14 @@ package com.management.clinic.backend.model.doctor;
 
 import com.management.clinic.backend.model.Gender;
 import com.management.clinic.backend.model.Speciality;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 public record DoctorInfo(
         @NotNull Long id,
         String name,
         Gender gender,
-        String email,
+        @Email String email,
         Speciality speciality) {
 
     public DoctorInfo(Doctor doctor) {
